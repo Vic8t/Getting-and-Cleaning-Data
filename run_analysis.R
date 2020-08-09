@@ -57,4 +57,4 @@ setnames(dataset, variable_names)
 dataset_mean <- summarize_all(group_by(dataset, subject, activityLabel), mean)
 
 # Save final data set
-write.csv(dataset_mean, "tidy_dataset.csv", row.names = FALSE)
+write.table(dataset_mean, "tidy_dataset.txt", row.names = FALSE)
