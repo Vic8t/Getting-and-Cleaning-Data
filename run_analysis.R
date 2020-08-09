@@ -35,21 +35,23 @@ X <- rbind(X_train, X_test)
 y <- rbind(y_train, y_test)
 
 # Extract only the mean and standard deviation of each measurement
-columns <- grep("mean\\(|std\\(", features$V2)
-mean_std <- select(X, all_of(columns))
+columns <- grep("mean\\(|std\\(", features$V2) ## find variable indexes containing mean( or std(
+mean_std <- select(X, columns)
 
 # Change activity names
-labels <- activity_labels$V2[y$V1]
-dataset <- cbind(subject, labels, mean_std)
+labels <- activity_labels$V2[y$V1] ## match activity id with the corresponding value
+dataset <- cbind(subject, labels, mean_std) ## merge subjects, activity labels and measurements
 
 # Update variable names
+## Get variable names and reformat them
 variable_names <- grep("mean\\(|std\\(", features$V2, value = TRUE)
 variable_names <- gsub("[()-]", "", variable_names)
 variable_names <- gsub("mean", "Mean", variable_names)
 variable_names <- gsub("std", "Std", variable_names)
 
+## Set new names
 variable_names <- c("subject", "activityLabel", variable_names)
-setnames(dataset, 1:68, variable_names)
+setnames(dataset, variable_names)
 
 # Average of each variable for each activity and subject
 dataset_mean <- summarize_all(group_by(dataset, subject, activityLabel), mean)
