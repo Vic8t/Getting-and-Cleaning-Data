@@ -29,18 +29,18 @@ y_test <- read.table("y_test.txt")
 
 setwd("../..") ## restore root working directory
 
-# Merge training and test sets
+# Merge train and test sets
 subject <- rbind(subject_train, subject_test)
 X <- rbind(X_train, X_test)
 y <- rbind(y_train, y_test)
 
 # Extract only the mean and standard deviation of each measurement
 columns <- grep("mean\\(|std\\(", features$V2) ## find variable indexes containing mean( or std(
-mean_std <- select(X, columns)
+X <- select(X, columns)
 
 # Change activity names
-labels <- activity_labels$V2[y$V1] ## match activity id with the corresponding value
-dataset <- cbind(subject, labels, mean_std) ## merge subjects, activity labels and measurements
+y <- activity_labels$V2[y$V1] ## match activity id with the corresponding value
+dataset <- cbind(subject, y, X) ## merge subjects, activity labels and measurements
 
 # Update variable names
 ## Get variable names and reformat them
